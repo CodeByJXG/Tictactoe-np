@@ -1,0 +1,82 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # allows manual trigger from GitHub UI
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Build React/Vite app
+      - name: Build React app
+        run: npm run build
+
+      # 5. Install Capacitor
+      - name: Install Capacitor
+        run: |
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+
+      # 6. Init Capacitor (if not already initialized)
+      - name: Init Capacitor
+        run: |
+          if [ ! -f "capacitor.config.ts" ] && [ ! -f "capacitor.config.json" ]; then
+            npx cap init "Tic Tac Toe" "com.nullpointer.tictactoe" --web-dir dist
+          fi
+
+      # 7. Add Android platform (if not already added)
+      - name: Add Android platform
+        run: |
+          if [ ! -d "android" ]; then
+            npx cap add android
+          fi
+
+      # 8. Sync Capacitor
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      # 9. Setup Java JDK 17
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # 10. Setup Android SDK
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # 11. Grant execute permission to gradlew
+      - name: Make gradlew executable
+        run: chmod +x android/gradlew
+
+      # 12. Build debug APK
+      - name: Build debug APK
+        run: |
+          cd android
+          ./gradlew assembleDebug
+
+      # 13. Upload APK as artifact (downloadable from GitHub)
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: tictactoe-np-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 7
