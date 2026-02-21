@@ -1,0 +1,277 @@
+/* ── Wrapper (reuses grid-bg, corner from MainMenu.css) ── */
+.vc-wrapper {
+  background: #0a0a0f;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Press Start 2P', monospace;
+  overflow: hidden;
+  position: relative;
+}
+
+.vc-wrapper::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 2px,
+    rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px
+  );
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* ── Panel ── */
+.vc-panel {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 2rem 2rem;
+  max-width: 440px;
+  width: 92%;
+}
+
+/* ── Difficulty picker ── */
+.vc-pick-title {
+  font-size: 0.75rem;
+  color: #e8e8f0;
+  letter-spacing: 0.1em;
+  margin-bottom: 1.8rem;
+  padding:1rem;
+}
+
+.vc-diff-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.vc-diff-btn {
+  font-size: 0.7rem;
+  padding: 1rem 1.5rem;
+  letter-spacing: 0.1em;
+  animation: none;
+}
+
+.vc-diff-easy {
+  border-color: #39ff14;
+  color: #39ff14;
+  text-shadow: 0 0 10px #39ff14;
+  box-shadow: 0 0 15px rgba(57,255,20,0.2);
+}
+.vc-diff-easy:hover {
+  box-shadow: 0 0 25px rgba(57,255,20,0.5);
+  transform: translateY(-2px);
+}
+
+.vc-diff-medium {
+  border-color: #ffe033;
+  color: #ffe033;
+  text-shadow: 0 0 10px #ffe033;
+  box-shadow: 0 0 15px rgba(255,224,51,0.2);
+}
+.vc-diff-medium:hover {
+  box-shadow: 0 0 25px rgba(255,224,51,0.5);
+  transform: translateY(-2px);
+}
+
+.vc-diff-hard {
+  border-color: #ff2d55;
+  color: #ff2d55;
+  text-shadow: 0 0 10px #ff2d55;
+  box-shadow: 0 0 15px rgba(255,45,85,0.2);
+}
+.vc-diff-hard:hover {
+  box-shadow: 0 0 25px rgba(255,45,85,0.5);
+  transform: translateY(-2px);
+}
+
+.vc-back {
+  font-size: 0.55rem;
+  padding: 0.7rem 1.2rem;
+  animation: none;
+}
+
+/* ── Game header ── */
+.vc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+}
+
+.vc-label {
+  font-size: 0.55rem;
+  color: #00f5ff;
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 8px #00f5ff;
+}
+
+.vc-label1 {
+  font-size: 5rem;
+  color: #00f5ff;
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 8px #00f5ff;
+  margin-bottom:1rem;
+}
+.vc-badge {
+  font-size: 0.45rem;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid;
+  letter-spacing: 0.1em;
+}
+.vc-badge-easy   { border-color: #39ff14; color: #39ff14; }
+.vc-badge-medium { border-color: #ffe033; color: #ffe033; }
+.vc-badge-hard   { border-color: #ff2d55; color: #ff2d55; }
+
+.vc-back-sm {
+  font-size: 0.6rem;
+  padding: 0.5rem 0.7rem;
+  animation: none;
+}
+
+/* ── Scoreboard ── */
+.vc-scoreboard {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid rgba(0,245,255,0.15);
+  background: rgba(0,245,255,0.03);
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.vc-score-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.vc-score-name {
+  font-size: 0.4rem;
+  color: rgba(232,232,240,0.5);
+  letter-spacing: 0.15em;
+}
+
+.vc-score-num {
+  font-size: 1.1rem;
+}
+.vc-score-num.player { color: #ff2d55; text-shadow: 0 0 10px #ff2d55; }
+.vc-score-num.draw   { color: rgba(232,232,240,0.4); }
+.vc-score-num.ai     { color: #00f5ff; text-shadow: 0 0 10px #00f5ff; }
+
+/* ── Status ── */
+.vc-status {
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: rgba(232,232,240,0.6);
+  margin-bottom: 1.2rem;
+  min-height: 1.2rem;
+  transition: color 0.3s;
+}
+.vc-status.win  { color: #39ff14; text-shadow: 0 0 12px #39ff14; animation: statusPop 0.4s ease; }
+.vc-status.lose { color: #ff2d55; text-shadow: 0 0 12px #ff2d55; animation: statusPop 0.4s ease; }
+.vc-status.draw { color: #ffe033; text-shadow: 0 0 12px #ffe033; animation: statusPop 0.4s ease; }
+
+@keyframes statusPop {
+  0%   { transform: scale(0.8); opacity: 0; }
+  60%  { transform: scale(1.1); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+/* ── Board ── */
+.vc-board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 90px);
+  grid-template-rows: repeat(3, 90px);
+  flex-shrink: 0;
+  width: 270px;
+  height: 270px;
+  margin: 0 auto 1.5rem;
+  border: none;
+}
+
+.vc-board.thinking { opacity: 0.7; }
+
+/* Grid lines via nth-child */
+.vc-cell:nth-child(1), .vc-cell:nth-child(2), .vc-cell:nth-child(3) { border-top: none; }
+.vc-cell:nth-child(7), .vc-cell:nth-child(8), .vc-cell:nth-child(9) { border-bottom: none; }
+.vc-cell:nth-child(1), .vc-cell:nth-child(4), .vc-cell:nth-child(7) { border-left: none; }
+.vc-cell:nth-child(3), .vc-cell:nth-child(6), .vc-cell:nth-child(9) { border-right: none; }
+
+.vc-cell {
+  width: 90px;
+  height: 90px;
+  min-width: 90px;
+  min-height: 90px;
+  background: transparent;
+  border: 1px solid rgba(0,245,255,0.25);
+  font-family: 'VT323', monospace;
+  font-size: 3.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  position: relative;
+  z-index: 1;
+}
+
+.vc-cell.hoverable:hover {
+  background: rgba(255,45,85,0.07);
+  cursor: pointer;
+}
+
+.vc-cell:disabled { cursor: default; }
+
+.vc-cell-x {
+  color: #ff2d55;
+  text-shadow: 0 0 15px #ff2d55, 0 0 30px #ff2d55;
+  animation: cellPop 0.2s ease;
+}
+
+.vc-cell-o {
+  color: #00f5ff;
+  text-shadow: 0 0 15px #00f5ff, 0 0 30px #00f5ff;
+  animation: cellPop 0.2s ease;
+}
+
+@keyframes cellPop {
+  0%   { transform: scale(0.5); opacity: 0; }
+  70%  { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ── Win line ── */
+.vc-win-line {
+  position: absolute;
+  height: 4px;
+  background: linear-gradient(90deg, #ffe033, #ff2d55);
+  box-shadow: 0 0 10px #ffe033, 0 0 20px #ff2d55;
+  border-radius: 2px;
+  z-index: 2;
+  transform-origin: center;
+  animation: lineGrow 0.35s ease forwards;
+}
+
+@keyframes lineGrow {
+  from { opacity: 0; transform: translate(-50%, -50%) rotate(var(--r, 0deg)) scaleX(0); }
+  to   { opacity: 1; }
+}
+
+/* ── Actions ── */
+.vc-actions {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+}
+
+.vc-action-btn {
+  font-size: 0.5rem;
+  padding: 0.7rem 1rem;
+  animation: none;
+}

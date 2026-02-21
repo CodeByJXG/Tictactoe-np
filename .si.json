@@ -1,0 +1,31 @@
+{
+  "plugin": "org.smartide.plugin.react",
+  "run": "npm run dev",
+  "gui": false,
+  "intelligence": {
+    ".json": {
+      "enabled": true,
+      "run": "vscode-json-language-server --stdio"
+    },
+    ".jsx": {
+      "enabled": true,
+      "run": "typescript-language-server --stdio"
+    },
+    ".css": {
+      "enabled": false,
+      "run": "vscode-css-language-server --stdio"
+    },
+    ".html": {
+      "enabled": true,
+      "run": "vscode-html-language-server --stdio"
+    },
+    ".js": {
+      "enabled": true,
+      "run": "typescript-language-server --stdio"
+    },
+    ".ts": {
+      "enabled": true,
+      "run": "typescript-language-server --stdio"
+    }
+  }
+}
