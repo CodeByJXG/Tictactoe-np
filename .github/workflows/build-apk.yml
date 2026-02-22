@@ -26,21 +26,21 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
-
-      - name: Install Capacitor
-        run: npm install @capacitor/core@5.7.0 @capacitor/cli@5.7.0 @capacitor/android@5.7.0
+        run: npm ci
 
       - name: Build React app
         run: npm run build
 
-      - name: Init Capacitor
+      - name: Install Capacitor
+        run: npm install @capacitor/core@5.7.0 @capacitor/cli@5.7.0 @capacitor/android@5.7.0
+
+      - name: Init Capacitor if needed
         run: |
           if [ ! -f "capacitor.config.ts" ] && [ ! -f "capacitor.config.json" ]; then
             npx cap init "Tic Tac Toe" "com.nullpointer.tictactoe" --web-dir dist
           fi
 
-      - name: Add Android platform
+      - name: Add Android platform if needed
         run: |
           if [ ! -d "android" ]; then
             npx cap add android
@@ -51,23 +51,26 @@ jobs:
 
       - name: Replace app icons
         run: |
-          ICON="public/imageLogo.png"
-          if [ -f "$ICON" ]; then
+          if [ -f "public/imageLogo.png" ]; then
             sudo apt-get install -y imagemagick
-            convert "$ICON" -resize 48x48   android/app/src/main/res/mipmap-mdpi/ic_launcher.png
-            convert "$ICON" -resize 72x72   android/app/src/main/res/mipmap-hdpi/ic_launcher.png
-            convert "$ICON" -resize 96x96   android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
-            convert "$ICON" -resize 144x144 android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-            convert "$ICON" -resize 192x192 android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-            convert "$ICON" -resize 48x48   android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png
-            convert "$ICON" -resize 72x72   android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png
-            convert "$ICON" -resize 96x96   android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
-            convert "$ICON" -resize 144x144 android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
-            convert "$ICON" -resize 192x192 android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+            for size in 48 72 96 144 192; do
+              case $size in
+                48)  folder="mipmap-mdpi" ;;
+                72)  folder="mipmap-hdpi" ;;
+                96)  folder="mipmap-xhdpi" ;;
+                144) folder="mipmap-xxhdpi" ;;
+                192) folder="mipmap-xxxhdpi" ;;
+              esac
+              convert public/imageLogo.png -resize ${size}x${size} android/app/src/main/res/${folder}/ic_launcher.png
+              convert public/imageLogo.png -resize ${size}x${size} android/app/src/main/res/${folder}/ic_launcher_round.png
+            done
           fi
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+
+      - name: Accept Android licenses
+        run: yes | sdkmanager --licenses || true
 
       - name: Clean Gradle cache
         run: rm -rf ~/.gradle/caches ~/.gradle/wrapper/dists
@@ -78,15 +81,25 @@ jobs:
       - name: Decode keystore
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/tictactoe-np.jks
+          # Verify keystore is valid
+          keytool -list -keystore android/app/tictactoe-np.jks \
+            -storepass "${{ secrets.KEYSTORE_PASSWORD }}" \
+            -storetype PKCS12 && echo "✅ Keystore valid" || echo "❌ Keystore invalid"
 
       - name: Build release APK
         run: |
           cd android
-          ./gradlew assembleRelease --no-daemon \
+          ./gradlew assembleRelease \
+            --no-daemon \
             -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/android/app/tictactoe-np.jks \
             -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
             -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
             -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+
+      - name: Verify APK exists
+        run: |
+          ls -lh android/app/build/outputs/apk/release/
+          echo "✅ APK built successfully"
 
       - name: Upload signed APK
         uses: actions/upload-artifact@v4
