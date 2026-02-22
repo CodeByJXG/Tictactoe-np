@@ -33,6 +33,7 @@
   width: 92%;
 }
 
+
 /* ── Label ── */
 .vp-label {
   font-size: 0.55rem;
@@ -41,13 +42,21 @@
   text-shadow: 0 0 8px #ff2d55;
   margin-bottom: 1rem;
 }
+.vp-label2 {
+  font-size: 0.55rem;
+  color: #ff2d55;
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 8px #ff2d55;
+}
 
 .vp-label1 {
   font-size: 5rem;
   color: #ff2d55;
   letter-spacing: 0.15em;
   text-shadow: 0 0 8px #ff2d55;
+  margin-bottom:1rem;
 }
+
 /* ── Name setup ── */
 .vp-setup-title {
   font-size: 0.65rem;
@@ -196,11 +205,29 @@
   flex-shrink: 0;
 }
 
-/* Grid lines */
-.vp-cell:nth-child(1), .vp-cell:nth-child(2), .vp-cell:nth-child(3) { border-top: none; }
-.vp-cell:nth-child(7), .vp-cell:nth-child(8), .vp-cell:nth-child(9) { border-bottom: none; }
-.vp-cell:nth-child(1), .vp-cell:nth-child(4), .vp-cell:nth-child(7) { border-left: none; }
-.vp-cell:nth-child(3), .vp-cell:nth-child(6), .vp-cell:nth-child(9) { border-right: none; }
+/* Grid lines drawn on the board itself — never disappear on win */
+.vp-board::before,
+.vp-board::after {
+  content: '';
+  position: absolute;
+  background: rgba(255,45,85,0.2);
+  z-index: 0;
+  pointer-events: none;
+}
+.vp-board::before {
+  width: 1px;
+  height: 100%;
+  top: 0;
+  left: 90px;
+  box-shadow: 90px 0 0 rgba(255,45,85,0.2);
+}
+.vp-board::after {
+  height: 1px;
+  width: 100%;
+  left: 0;
+  top: 90px;
+  box-shadow: 0 90px 0 rgba(255,45,85,0.2);
+}
 
 .vp-cell {
   width: 90px;
@@ -208,7 +235,7 @@
   min-width: 90px;
   min-height: 90px;
   background: transparent;
-  border: 1px solid rgba(255,45,85,0.2);
+  border: none;
   font-family: 'VT323', monospace;
   font-size: 3.5rem;
   cursor: pointer;

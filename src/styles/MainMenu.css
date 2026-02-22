@@ -384,6 +384,7 @@ html, body, #root {
   position: relative;
   background: #0e0e18;
   border: 1px solid var(--neon-o);
+  border-radius:1%;
   box-shadow: 0 0 30px rgba(0, 245, 255, 0.2), 0 0 60px rgba(0, 245, 255, 0.08);
   padding: 2rem 2rem 1.5rem;
   max-width: 380px;
@@ -427,11 +428,12 @@ html, body, #root {
 .modal-logo {
   width: 90px;
   height: 90px;
-  border-radius:50%;
-  object-fit: contain;
+  object-fit: cover;
+  border-radius: 50%;
   margin: 0 auto 1rem;
   display: block;
-  filter: drop-shadow(0 0 10px var(--neon-o));
+  border: 2px solid var(--neon-o);
+  box-shadow: 0 0 15px rgba(0, 245, 255, 0.4), 0 0 30px rgba(0, 245, 255, 0.15);
 }
 
 /* Divider */
@@ -507,4 +509,77 @@ html, body, #root {
   color: rgba(232, 232, 240, 0.3);
   letter-spacing: 0.2em;
   margin-top: 0.25rem;
+}
+
+/* ── Music toggle button ── */
+.music-toggle {
+  background: transparent;
+  border: 2px solid;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.6rem;
+  padding: 0.85rem 1.5rem;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  animation: fadeUp 0.8s ease 0.75s both;
+}
+
+.music-toggle.music-on {
+  border-color: #39ff14;
+  color: #39ff14;
+  text-shadow: 0 0 10px #39ff14;
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.2), inset 0 0 15px rgba(57, 255, 20, 0.05);
+}
+
+.music-toggle.music-on:hover {
+  box-shadow: 0 0 25px rgba(57, 255, 20, 0.5), inset 0 0 20px rgba(57, 255, 20, 0.15);
+  transform: translateY(-2px);
+}
+
+.music-toggle.music-off {
+  border-color: rgba(232, 232, 240, 0.2);
+  color: rgba(232, 232, 240, 0.3);
+}
+
+.music-toggle.music-off:hover {
+  border-color: rgba(232, 232, 240, 0.4);
+  color: rgba(232, 232, 240, 0.5);
+  transform: translateY(-2px);
+}
+
+.music-toggle:active {
+  transform: scale(0.97);
+}
+
+.music-icon {
+  font-size: 0.75rem;
+}
+
+.music-label {
+  letter-spacing: 0.1em;
+}
+
+/* Pulsing dot indicator */
+.music-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(232, 232, 240, 0.15);
+  flex-shrink: 0;
+}
+
+.music-dot.pulse {
+  background: #39ff14;
+  box-shadow: 0 0 6px #39ff14;
+  animation: dotPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.6); }
 }

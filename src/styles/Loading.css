@@ -300,3 +300,19 @@
   color: rgba(232,232,240,0.25);
   letter-spacing: 0.2em;
 }
+
+/* ── Tap to enable sound hint ── */
+.loading-tap-hint {
+  font-family: "VT323", monospace;
+  font-size: 0.9rem;
+  color: var(--neon-y, #ffe033);
+  letter-spacing: 0.2em;
+  animation: blink 1s step-end infinite;
+  margin-top: -0.5rem;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+

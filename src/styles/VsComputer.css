@@ -39,7 +39,6 @@
   color: #e8e8f0;
   letter-spacing: 0.1em;
   margin-bottom: 1.8rem;
-  padding:1rem;
 }
 
 .vc-diff-group {
@@ -108,15 +107,19 @@
   color: #00f5ff;
   letter-spacing: 0.15em;
   text-shadow: 0 0 8px #00f5ff;
+  padding:0.5rem;
 }
+
+
 
 .vc-label1 {
   font-size: 5rem;
   color: #00f5ff;
   letter-spacing: 0.15em;
   text-shadow: 0 0 8px #00f5ff;
-  margin-bottom:1rem;
 }
+
+
 .vc-badge {
   font-size: 0.45rem;
   padding: 0.3rem 0.6rem;
@@ -197,11 +200,31 @@
 
 .vc-board.thinking { opacity: 0.7; }
 
-/* Grid lines via nth-child */
-.vc-cell:nth-child(1), .vc-cell:nth-child(2), .vc-cell:nth-child(3) { border-top: none; }
-.vc-cell:nth-child(7), .vc-cell:nth-child(8), .vc-cell:nth-child(9) { border-bottom: none; }
-.vc-cell:nth-child(1), .vc-cell:nth-child(4), .vc-cell:nth-child(7) { border-left: none; }
-.vc-cell:nth-child(3), .vc-cell:nth-child(6), .vc-cell:nth-child(9) { border-right: none; }
+/* Grid lines drawn on the board itself — never disappear on win */
+.vc-board::before,
+.vc-board::after {
+  content: '';
+  position: absolute;
+  background: rgba(0,245,255,0.25);
+  z-index: 0;
+  pointer-events: none;
+}
+/* Vertical lines at 90px and 180px */
+.vc-board::before {
+  width: 1px;
+  height: 100%;
+  top: 0;
+  left: 90px;
+  box-shadow: 90px 0 0 rgba(0,245,255,0.25);
+}
+/* Horizontal lines at 90px and 180px */
+.vc-board::after {
+  height: 1px;
+  width: 100%;
+  left: 0;
+  top: 90px;
+  box-shadow: 0 90px 0 rgba(0,245,255,0.25);
+}
 
 .vc-cell {
   width: 90px;
@@ -209,7 +232,7 @@
   min-width: 90px;
   min-height: 90px;
   background: transparent;
-  border: 1px solid rgba(0,245,255,0.25);
+  border: none;
   font-family: 'VT323', monospace;
   font-size: 3.5rem;
   cursor: pointer;
